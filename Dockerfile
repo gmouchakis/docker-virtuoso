@@ -6,8 +6,8 @@ MAINTAINER Yiannis Mouchakis <gmouchakis@iit.demokritos.gr>
 RUN apt-get update \
         && apt-get install -y build-essential debhelper autotools-dev autoconf automake unzip wget net-tools git libtool flex bison gperf gawk m4 libssl-dev libreadline-dev libreadline-dev openssl
 
-# Virtuoso 7.2.4 commit
-ENV VIRTUOSO_COMMIT 96055f6a70a92c3098a7e786592f4d8ba8aae214
+# Virtuoso 7.1 commit
+ENV VIRTUOSO_COMMIT 658e00de9b4e2e04d88bff6fcdecab28d08019d5
 
 RUN apt-get update && apt-get install -y \
         build-essential \
