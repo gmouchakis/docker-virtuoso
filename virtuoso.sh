@@ -9,7 +9,7 @@ then
   mv /virtuoso.ini . 2>/dev/null
 fi
 
-if [ ! -f "/.data_loaded" ];
+if [ ! -f "/data/.data_loaded" ];
 then
 
     if [ "$DOWNLOAD_URL" ]; then
@@ -35,7 +35,7 @@ then
     echo "$(cat /load_data.sql)"
     virtuoso-t +wait && isql-v -U dba -P "$pwd" exec="`cat /load_data.sql`"
     kill $(ps aux | grep '[v]irtuoso-t' | awk '{print $2}')
-    touch /.data_loaded
+    touch /data/.data_loaded
     
     
     if [ "$DOWNLOAD_URL" ]; then
