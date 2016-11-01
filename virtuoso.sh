@@ -28,12 +28,23 @@ then
 
     if [ "$DBA_PASSWORD" ]; then pwd="$DBA_PASSWORD" ; fi
     if [ "$DEFAULT_GRAPH" ]; then graph="$DEFAULT_GRAPH" ; fi
-    echo "ld_dir_all('toLoad', '*', '$graph');" >> /load_data.sql
-    echo "rdf_loader_run();" >> /load_data.sql
-    echo "exec('checkpoint');" >> /load_data.sql
-    echo "WAIT_FOR_CHILDREN; " >> /load_data.sql
-    echo "$(cat /load_data.sql)"
-    virtuoso-t +wait && isql-v -U dba -P "$pwd" exec="`cat /load_data.sql`"
+        
+    virtuoso-t +wait
+    
+    isql-v -U dba -P "$pwd" exec="ld_dir_all('toLoad', '*', '$graph');"
+    
+    cores=$(nproc --all)
+    loaders=$(awk  'BEGIN { rounded = sprintf("%.0f", '$cores'/2.5); print rounded }')
+    
+   for ((n=1;n<=$loaders;n++)); do
+      echo Starting RDF loader $n 
+      isql-v -U dba -P "$pwd" exec="rdf_loader_run();" &
+    done
+
+    wait
+    isql-v -U dba -P "$pwd" exec="checkpoint;"
+    
+    
     kill $(ps aux | grep '[v]irtuoso-t' | awk '{print $2}')
     touch /data/.data_loaded
     
