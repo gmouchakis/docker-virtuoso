@@ -44,8 +44,8 @@ then
     wait
     isql-v -U dba -P "$pwd" exec="checkpoint;"
     
-    
-    kill $(ps aux | grep '[v]irtuoso-t' | awk '{print $2}')
+    isql-v -U dba -P "$pwd" -K
+
     touch /data/.data_loaded
     
     
