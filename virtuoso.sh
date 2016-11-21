@@ -4,11 +4,6 @@ cd /data
 
 mkdir -p dumps
 
-if [ ! -f ./virtuoso.ini ];
-then
-  mv /virtuoso.ini . 2>/dev/null
-fi
-
 if [ ! -f "/data/.data_loaded" ];
 then
 
@@ -29,7 +24,7 @@ then
     if [ "$DBA_PASSWORD" ]; then pwd="$DBA_PASSWORD" ; fi
     if [ "$DEFAULT_GRAPH" ]; then graph="$DEFAULT_GRAPH" ; fi
         
-    virtuoso-t +wait
+    virtuoso-t +wait +configfile /virtuoso.ini
     
     isql-v -U dba -P "$pwd" exec="ld_dir_all('toLoad', '*', '$graph');"
     
@@ -58,5 +53,5 @@ then
 fi
 
 
-virtuoso-t +wait +foreground
+virtuoso-t +wait +foreground +configfile /virtuoso.ini
 
