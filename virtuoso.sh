@@ -50,6 +50,12 @@ then
     
     echo "finished loading"
     
+    while [ -f "/usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.lck" ]
+    do
+      echo "waiting for virtuoso to close"
+      sleep 10
+    done
+
 fi
 
 
