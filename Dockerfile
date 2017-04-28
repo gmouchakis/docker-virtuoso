@@ -4,7 +4,7 @@ MAINTAINER Yiannis Mouchakis <gmouchakis@iit.demokritos.gr>
 
 # Install Virtuoso prerequisites
 RUN apt-get update \
-        && apt-get install -y build-essential debhelper autotools-dev autoconf automake unzip wget net-tools git libtool flex bison gperf gawk m4 libssl-dev libreadline-dev openssl
+        && apt-get install -y curl build-essential debhelper autotools-dev autoconf automake unzip wget net-tools git libtool flex bison gperf gawk m4 libssl-dev libreadline-dev openssl
 
 # Virtuoso 7.1 commit
 ENV VIRTUOSO_TAG v7.1.0
