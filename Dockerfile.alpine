@@ -51,10 +51,15 @@ COPY --from=build $VIRTUOSO_PATH $VIRTUOSO_PATH
 
 RUN  apk add --no-cache openssl readline  && \
      ln -s $VIRTUOSO_PATH/var/lib/virtuoso /var/lib/virtuoso && \
-     ln -s /var/lib/virtuoso/db /data
+     ln -s /var/lib/virtuoso/db /data && \
+     mkdir -p /etc/virtuoso && \
+     mv /var/lib/virtuoso/db/virtuoso.ini /etc/virtuoso/virtuoso.ini &&\
+     ln -s /etc/virtuoso /config
+
+RUN  mkdir /import ; sed -i '/DirsAllowed/ s:$:,/import:' /config/virtuoso.ini
 
 EXPOSE 8890 1111
-VOLUME [ "/data" ]
+VOLUME [ "/data", "/config", "/import" ]
 
 WORKDIR $VIRTUOSO_PATH
 
@@ -62,4 +67,4 @@ COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 755 /docker-entrypoint.sh
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
-CMD [ "virtuoso-t", "+wait", "+foreground" ]
+CMD [ "virtuoso-t", "+wait", "+foreground", "+configfile", "/config/virtuoso.ini" ]
