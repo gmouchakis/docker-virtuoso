@@ -53,10 +53,11 @@ RUN  apk add --no-cache openssl readline  && \
      ln -s $VIRTUOSO_PATH/var/lib/virtuoso /var/lib/virtuoso && \
      ln -s /var/lib/virtuoso/db /data && \
      mkdir -p /etc/virtuoso && \
-     mv /var/lib/virtuoso/db/virtuoso.ini /etc/virtuoso/virtuoso.ini &&\
+     mv /var/lib/virtuoso/db/virtuoso.ini /etc/virtuoso/virtuoso.ini && \
      ln -s /etc/virtuoso /config
 
-RUN  mkdir /import ; sed -i '/DirsAllowed/ s:$:,/import:' /config/virtuoso.ini
+RUN  mkdir /import ; sed -i '/DirsAllowed/ s:$:,/import:' /config/virtuoso.ini && \
+     sed -i '/^Load.*[creolewiki|mediawiki|wikiv]/ s/^;*/;/' /config/virtuoso.ini
 
 EXPOSE 8890 1111
 VOLUME [ "/data", "/config", "/import" ]
